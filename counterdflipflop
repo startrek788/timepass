@@ -1,0 +1,35 @@
+Verilog code for Counter:
+Module counter_ripple(q,clk,reset);
+ output [3:0]q;
+ input clk, reset;
+ tff t1(q[0],clk,reset);
+ tff t2(q[1],q[0],reset);
+ tff t3(q[2],q[1],reset);
+ tff t4(q[3],q[2],reset);
+endmodule
+module tff(q,clk,reset);
+ output q;
+ inputclk, reset;
+ wire d;
+ dff d1(q,d,clk,reset);
+ not n1(d,q);
+endmodule
+module dff(q,d,clk,reset);
+ output q;
+ input d,clk,reset;
+ reg q;
+ always @(posedge reset or negedgeclk)
+ If(reset) q=1'b0;
+ else q=d;
+endmodule
+
+initial begin
+clk=1'b0;
+reset=1'b1;
+#10 reset=1'b0;
+#200 $finish;
+end
+always
+#5 clk=~clk;
+initial $monitor($time,"Output q=%b",q);
+endmodule
