@@ -1,0 +1,121 @@
+VERILOG Code for T flipflop:
+module t(q,qbar,t,clk);
+ output q,qbar;
+ input t,clk;
+ reg q,qbar;
+ initial
+ begin
+ q=1'b1;
+ qbar=1'b0;
+ end
+ always @ (posedge clk)
+ begin
+ if(clk)
+ begin
+ if (t==1'b0) begin q=q; qbar=qbar;end
+ else begin q=~q; qbar=~qbar;end
+ end
+ end
+endmodule
+
+reset = 0;
+t = 0;
+clk = 0;#25
+t = 1;#100;
+end
+always
+#10 clk = ~clk;
+
+
+
+VERILOG Code for RS flipflop:
+module sr(Q, Qbar, S, R, reset, clk);
+ input S, R, reset, clk;
+ output reg Q, Qbar;
+ initial
+ Q <= 1'b0;
+ always @(posedge clk)
+ begin
+ if(S == 1'b0 && R == 1'b0)
+ Q <= Q;
+ else if(S == 1'b0 && R == 1'b1)
+ Q <= 1'b0;
+ else if(S == 1'b1 && R == 1'b0)
+ Q <= 1'b1;
+ else if(S == 1'b1 && R == 1'b1)
+ Q <= 1'bz;
+ Qbar <= ~Q;
+ end
+endmodule
+
+reset = 0;
+S=0; R=0; clk = 0; #50
+S=1; R=0; #50
+S=0; R=1; #50
+S=1; R=1; #100;
+end
+always
+#10 clk = ~clk;
+
+
+VERILOG Code for D flipflop:
+module dff(Q, Qbar, D, clk, reset);
+ input D, clk, reset;
+ output reg Q, Qbar;
+ initial
+ Q <= 1'b0;
+ always @(posedge clk)
+ begin
+ if(reset == 1'b1)
+ Q <= 1'b0;
+ else if(D == 1'b0)
+ Q <= 1'b0;
+ else if(D == 1'b1)
+ Q <= 1'b1;
+ Qbar <= ~Q;
+ end
+endmodule
+
+reset = 0;
+D = 0;
+clk = 0;#25
+D = 1;#100
+end
+always
+#10
+clk = ~clk;
+
+
+VERILOG Code for JK flipflop:
+module behJK(JK,clk,Q,Qbar);
+ input[1:0] JK;
+ input clk;
+ output Q,Qbar;
+ reg Q,Qbar;
+ always@(posedge clk)
+ begin
+ case(JK)
+ 2'd0:Q=Q;
+ 2'd1:Q=0;
+ 2'd2:Q=1;
+ 2'd3:Q=~Q;
+ endcase
+ Qbar=~Q;
+ end
+endmodule
+
+initial
+begin
+// Initialize Inputs
+#10 JK=2'b00;clk=1'b0;
+#10 JK=2'b01;clk=1'b1;
+#10 JK=2'b00;clk=1'b1;
+#10 JK=2'b11;clk=1'b1;
+end
+always
+#10 clk = ~clk;
+initial
+$monitor($time,"JK=%b,clk=%b,Q=%b,Qbar=%b",J
+K,clk,Q,Qbar);
+initial #200 $stop;
+endmodule
