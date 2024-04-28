@@ -1,0 +1,28 @@
+1) Parallel In – Parallel Out
+moduleshiftreg_pipo (out_pipo,in_pipo,reset,clk);
+output [7:0] out_pipo;
+input [7:0] in_pipo;
+input reset,clk;
+reg [7:0]out_pipo;
+always @(posedge clk)
+begin
+if(reset)
+out_pipo = 8'd0;
+else
+out_pipo = in_pipo;
+end
+endmodule
+
+in_pipo = 0;
+reset = 1;
+clk = 0;
+#10 clk = 1;
+#10 clk = 0;
+reset = 0;
+in_pipo = 8'b 00101110;
+#10 clk = 1;
+#10 clk = 0;
+in_pipo = 8'b 10110111;
+#10 clk = 1;
+#10 clk = 0;
+end
