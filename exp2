@@ -1,0 +1,55 @@
+Data Flow modeling:
+Module half_dataflow(s,c,a,b);
+ input a,b;
+ output s,c;
+ and(c,a,b);
+ xor(s,a,b);
+endmodule
+module full_add(s,c,a,b,cin);
+ input a,b,cin;
+ output s,c;
+ wire c1,c2,s1;
+ half_dataflow h1(s1,c1,a,b);
+ half_dataflow h2(s,c2,s1,cin);
+ or(c,c1,c2);
+endmodule
+
+
+Structural modeling
+modulehalf_structural(s,c,a,b);
+ input a,b;
+ outpu ts,c;
+ assign s=a^b;
+ assign c=a&b;
+endmodule
+module full_add(s,c,a,b,cin);
+ input a,b,cin;
+ output s,c;
+ wire c1,c2,s1;
+ half_dataflow h1(s1,c1,a,b);
+ half_dataflow h2(s,c2,s1,cin);
+ or(c,c1,c2);
+endmodule
+
+
+Module half_behavioral(s,c,a,b);
+ Input a,b;
+ Output s,c;
+ reg s;
+ always@(a,b)
+ case({a,b})
+ 2'd0: s=0;
+ 2'd1: s=1;
+ 2'd2: s=1;
+ 2'd3: s=0;
+ default:$display("invalid");
+ endcase
+endmodule
+module full_add(s,c,a,b,cin);
+ input a,b,cin;
+ output s,c;
+ wire c1,c2,s1;
+ half_dataflow h1(s1,c1,a,b);
+ half_dataflow h2(s,c2,s1,cin);
+ or(c,c1,c2);
+endmodule
