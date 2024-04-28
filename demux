@@ -1,0 +1,89 @@
+Verilog code: ( Data flow level)
+module Demultiplexer(in,s0,s1,s2,d0,d1,d2,d3,d4,d5,d6,d7);
+ input in,s0,s1,s2;
+ output d0,d1,d2,d3,d4,d5,d6,d7;
+ assign d0=(in & ~s2 & ~s1 &~s0),
+ d1=(in & ~s2 & ~s1 &s0),
+ d2=(in & ~s2 & s1 &~s0),
+ d3=(in & ~s2 & s1 &s0),
+ d4=(in & s2 & ~s1 &~s0),
+ d5=(in & s2 & ~s1 &s0),
+ d6=(in & s2 & s1 &~s0),
+ d7=(in & s2 & s1 &s0);
+endmodule
+moduleFull_adder(sum,cout,a,b,cin);
+ output sum,cout;
+ input a,b,cin;
+ wire w0,w1,w2,w3,w4,w5,w6,w7;
+ Demultiplexer d1 (in,a,b,cin,w0,w1,w2,w3,w4,w5,w6,w7);
+ assign in=1,
+ sum = (w1 | w2 | w4 | w7),
+ cout = (w3 | w5 | w6 | w7);
+endmodule
+
+Verilog code: (Behavioral Level)
+module demux(din,s,d);
+ output [7:0] d;
+ reg [7:0] d;
+ input din;
+ wire din;
+ input [2:0] s;
+ wire [2:0] s;
+ always @(din or s)
+ begin
+ case(s)
+ 0:d={din,7'b0000000};
+ 1:d={1'b0,din,6'b000000};
+ 2:d={2'b00,din,5'b00000};
+ 3:d={3'b000,din,4'b0000};
+ 4:d={4'b0000,din,3'b000};
+ 5:d={5'b00000,din,2'b00};
+ 6:d={6'b000000,din,1'b0};
+ 7:d={7'b0000000,din};
+ endcase
+ end
+endmodule
+module Full_adder(sum,cout,a,b,cin);
+ input a,b,cin;
+ output sum,cout;
+ wire w0,w1,w2,w3,w4,w5,w6,w7;
+ demux d1(in,{a,b,cin},{w0,w1,w2,w3,w4,w5,w6,w7});
+ assign in=1;
+ assign sum = w1 | w2 | w4 | w7;
+ assign cout = w3 | w5 | w6 | w7;
+endmodule
+
+Verilog code for: (Gate Level)
+module Demu(i,s0,s1,s2,d0,d1,d2,d3,d4,d5,d6,d7);
+ input s0,s1,s2,i;
+ output d0,d1,d2,d3,d4,d5,d6,d7;
+ not(not_s2,s2);
+ not(not_s1,s1);
+ not(not_s0,s0);
+ and(d0,i,not_s2,not_s1,not_s0);
+ and(d1,i,not_s2,not_s1,s0);
+ and(d2,i,not_s2,not_s1,s0);
+ and(d3,i,not_s2,s1,not_s0);
+ and(d4,i,s2,not_s1,not_s0);
+ and(d5,i,s2,not_s1,s0);
+ and(d6,i,s2,s1,not_s0);
+ and(d7,i,s2,s1,s0);
+endmodule
+module Full_ad(sum,cout,a,b,cin);
+ output sum,cout;
+ input a,b,cin;
+ wire w0,w1,w2,w3,w4,w5,w6,w7;
+ Demu d1(i,a,b,cin,w0,w1,w2,w3,w4,w5,w6,w7);
+ assign i=1;
+ or(sum,w1,w2,w4,w7);
+ or(cout,w3,w5,w6,w7);
+endmodule
+
+a = 0;b = 0;cin = 0;#100;
+a = 0;b = 0;cin = 1;#100;
+a = 0;b = 1;cin = 0;#100;
+a = 0;b = 1;cin = 1;#100;
+a = 1;b = 0;cin = 0;#100;
+a = 1;b = 0;cin = 1;#100;
+a = 1;b = 1;cin = 0;#100;
+a = 1;b = 1;cin = 1;#100;
