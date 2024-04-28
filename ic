@@ -1,0 +1,54 @@
+VERILOG CODEDEMULTIPLEXER IC 74138: One
+enable line
+module decoder(a,en,y);
+ input [2:0]a;
+ input en;
+ output reg [7:0]y;
+ always @(a or en)
+ begin
+ If(en)
+ y=8'b00000000;
+ else
+ case(a)
+ 3'b000:y=8'b10000000;
+ 3'b001:y=8'b01000000;
+ 3'b010:y=8'b001000000;
+ 3'b011:y=8'b00010000;
+ 3'b100:y=8'b00001000;
+ 3'b101:y=8'b00000100;
+ 3'b110:y=8'b00000010;
+ 3'b111:y=8'b00000001;
+ endcase
+ end
+endmodule
+
+VERILOG CODEDEMULTIPLEXER IC 74138: Three enable lines (Gate
+Level)
+module encoder(e1,e2,e3,a0,a1,a2,o0,o1,o2,o3,o4,o5,o6,o7);
+ input e1,e2,e3,a0,a1,a2;
+ output o0,o1,o2,o3,o4,o5,o6,o7;
+ wire not_a0, not_a1, not_a2, not_e1, not_e2,et;
+ not(not_a0,a0);
+ not(not_a1,a1);
+ not(not_a2,a2);
+ not(not_e1,e1);
+ not(not_e2,e2);
+ and(et, not_e1,not_e2,e3);
+ nand(o0,et, not_a2,not_a1,not_a0);
+ nand(o1,et, not_a2,not_a1,a0);
+ nand(o2, et, not_a2,a1,not_a0);
+ nand(o3, et, not_a2,a1,a0);
+ nand(o4, et, a2,not_a1,not_a0);
+ nand(o5,et, a2,a1,not_a0);
+ nand(o6,et, a2,a1,not_a0);
+ nand(o7,et, a2,a1,a0);
+endmodule
+
+a = 000;en = 0;#100;
+a = 001;en = 0;#100;
+a = 010;en = 0;#100;
+a = 011;en = 0;#100;
+a = 100;en = 0;#100;
+a = 101;en = 0;#100;
+a = 110;en = 0;#100;
+a = 111;en = 0;#100;
