@@ -1,0 +1,27 @@
+Verilog code for counter:
+module Upcounter(reset,enable,clk,count);
+ input clk;
+ input reset;
+ input enable;
+ output reg [3:0]count;
+ initial
+ count = 0;
+ always @(posedge clk) begin
+ If (enable == 1 && reset == 0) begin
+ count = count + 1'b1;
+ If (count == 4'b1111) begin
+ count = 4'b0000;
+ end
+ end
+end
+endmodule
+
+Verilog Testbench
+initial begin
+// Initialize Inputs
+reset = 0;
+enable = 1;
+clk = 0;
+end
+always
+begin #50; clk = ~clk;end
