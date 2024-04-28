@@ -14,11 +14,10 @@ module full_add(s,c,a,b,cin);
  or(c,c1,c2);
 endmodule
 
-
 Structural modeling
-modulehalf_structural(s,c,a,b);
+module half_ dataflow (s,c,a,b);
  input a,b;
- outpu ts,c;
+ output s,c;
  assign s=a^b;
  assign c=a&b;
 endmodule
@@ -31,17 +30,17 @@ module full_add(s,c,a,b,cin);
  or(c,c1,c2);
 endmodule
 
-
-Module half_behavioral(s,c,a,b);
+Behavioral modeling:
+Module half_dataflow (s,c,a,b);
  Input a,b;
  Output s,c;
- reg s;
+ reg s,c;
  always@(a,b)
  case({a,b})
- 2'd0: s=0;
- 2'd1: s=1;
- 2'd2: s=1;
- 2'd3: s=0;
+ 2'd0: begin s=0;c=0;end
+ 2'd1: begin s=1;c=0;end
+ 2'd2: begin s=1;c=0;end
+ 2'd3: begin s=0;c=1;end
  default:$display("invalid");
  endcase
 endmodule
