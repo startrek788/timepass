@@ -1,0 +1,81 @@
+VERILOG Code for 1 Bit Full Adder: (Gate level)
+module fa(a,b,cin,sum,cout);
+ input a,b,cin;
+ output sum,cout;
+ wire s0,c0,c1;
+ xor(s0,a,b);
+ xor(sum,s0,cin);
+ and(c0,a,b);
+ and(c1,s0,cin);
+ or(cout,c0,c1);
+endmodule
+module fa_4bit(a,b,cin,sum,cout);
+ input[3:0] a,b;
+ output[3:0] sum;
+ input cin;
+ output cout;
+ wire[2:0] c;
+ fa fa1(a[0],b[0],cin,sum[0],c[0]);
+ fa fa2(a[1],b[1],c[0],sum[1],c[1]);
+ fa fa3(a[2],b[2],c[1],sum[2],c[2]);
+ fa fa4(a[3],b[3],c[2],sum[3],cout);
+endmodule
+
+
+(Dataflow level)
+Module fa(a,b,cin,sum,cout);
+ Input a,b,cin;
+ Output sum,cout;
+ assign sum = a ^ b ^ cin;
+ assign cout = ((a & b) | (cin& (a ^ b)));
+endmodule
+module fa_4bit(a,b,cin,sum,cout);
+ input[3:0] a,b;
+ output[3:0] sum;
+ input cin;
+ output cout;
+ wire[2:0] c;
+ fa fa1(a[0],b[0],cin,sum[0],c[0]);
+ fa fa2(a[1],b[1],c[0],sum[1],c[1]);
+ fa fa3(a[2],b[2],c[1],sum[2],c[2]);
+ fa fa4(a[3],b[3],c[2],sum[3],cout);
+endmodule
+
+
+(Behavioral or Algorithmic level)
+module fa(a,b,cin,sum,cout);
+ input a,b,cin;
+ output sum,cout;
+ reg sum,cout;
+ always@(a or b or cin)
+ case ({a,b,cin})
+ 3'd0: begin sum=0; cout=0;end
+ 3'd1: begin sum=1; cout=0;end
+ 3'd2: begin sum=1; cout=0;end
+ 3'd3: begin sum=0; cout=1;end
+ 3'd4: begin sum=1; cout=0;end
+ 3'd5: begin sum=0; cout=1;end
+ 3'd6: begin sum=0; cout=1;end
+ 3'd7: begin sum=1; cout=1;end
+endcase
+endmodule
+module fa_4bit(a,b,cin,sum,cout);
+ input[3:0] a,b;
+ output[3:0] sum;
+ input cin;
+ output cout;
+ wire[2:0] c;
+ fa fa1(a[0],b[0],cin,sum[0],c[0]);
+ fa fa2(a[1],b[1],c[0],sum[1],c[1]);
+ fa fa3(a[2],b[2],c[1],sum[2],c[2]);
+ fa fa4(a[3],b[3],c[2],sum[3],cout);
+endmodule
+
+a = 0;b = 0;cin = 0;#100;
+a = 1;b = 2;cin = 1;#100;
+a = 3;b = 4;cin = 0;#100;
+a = 5;b = 6;cin = 1;#100;
+a = 7;b = 8;cin = 0;#100;
+a = 9;b = 10;cin = 1;#100;
+a = 11;b = 12;cin = 0;#100;
+a = 13;b = 14;cin = 1;#100;
