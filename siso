@@ -1,0 +1,42 @@
+4)SISO Shift Register:
+module shiftreg_siso (out_siso,in_siso,reset,clk);
+output out_siso;
+input in_siso,reset,clk;
+wire [8:0] temp_siso;
+assign temp_siso[0] = in_siso;
+genvar r;
+generate
+for(r=0;r<8;r=r+1)
+begin :generating_d_flipflops_siso
+DFF D_FlipFlop_siso
+(.q(temp_siso[r+1]),.d(temp_siso[r]),.reset(reset),.clk(clk));
+end
+endgenerate
+assign out_siso = temp_siso[8];
+endmodule
+module DFF(q,d,reset,clk);
+output q;
+input d,reset,clk;
+reg q;
+always @ (posedgeclk)
+if(reset)
+q=1'b0;
+else
+q=d;
+endmodule
+
+begin
+// Initial Inputs
+in_siso = 0;
+reset = 1;
+clk = 0;
+#50 reset = 0;
+end
+always
+begin :in_siso_stimulus
+#20 in_siso = 1;
+#30 in_siso = 0;
+end
+always
+#10 clk = ~clk;
+Endmodule
