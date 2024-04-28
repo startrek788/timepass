@@ -1,0 +1,76 @@
+Verilog Code for 2:1 MUX using if-else
+module mux2bit(y,a,b,sel);
+ input a,b;
+ input sel;
+ output y;
+ reg y;
+ always@( a or b or sel)
+ if(sel==0)
+ y <= a;
+ else if(sel==1)
+ y <= b;
+endmodule
+module mux4bit(out,a0,a1,a2,a3,s0,s1);
+ wire w1,w2;
+ input a0,a1,a2,a3;
+ input s0,s1;
+ output out;
+ mux2bit mux1 (w1,a0,a1,s0);
+ mux2bit mux2 (w2,a2,a3,s0);
+ mux2bit mux3 (out,w1,w2,s1);
+endmodule
+
+
+Verilog Code for 2:1 MUX using Case Statement:
+module mux2bit(y,a,b,sel);
+ input a,b;
+ input sel;
+ output y;
+ reg y;
+ always@( a or b or sel)
+ begin
+ case (sel)
+ 1'b0:y<=a;
+ 1'b1:y<=b;
+ endcase
+ end
+endmodule
+module mux4bit(out,a0,a1,a2,a3,s0,s1);
+ wire w1,w2;
+ input a0,a1,a2,a3;
+ input s0,s1;
+ output out;
+ mux2bit mux1 (w1,a0,a1,s0);
+ mux2bit mux2 (w2,a2,a3,s0);
+ mux2bit mux3 (out,w1,w2,s1);
+endmodule
+
+Verilog Code for 2:1 MUX using data flow level:
+`timescale 1ns/1ps
+module mux2bit(y,a,b,sel);
+ input a,b;
+ input sel;
+ output y;
+ assign y=((a & ~(sel)) | (b & (sel)));
+endmodule
+module mux4bit(out,a0,a1,a2,a3,s0,s1);
+ wire w1,w2;
+ input a0,a1,a2,a3;
+ input s0,s1;
+ output out;
+ mux2bit mux1 (w1,a0,a1,s0);
+ mux2bit mux2 (w2,a2,a3,s0);
+ mux2bit mux3 (out,w1,w2,s1);
+endmodule
+
+
+
+a = 1;
+b = 0;
+sel = 0;#10;
+sel = 1;#10;
+a0 = 1;a1 = 0; a2 = 1;a3 = 0;
+s0 = 0;s1 = 0;#100;
+s0 = 1;s1 = 0; #100;
+s0 = 0;s1 = 1;#100;
+s0 = 1;s1 = 1;#100;
