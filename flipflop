@@ -87,35 +87,39 @@ clk = ~clk;
 
 
 VERILOG Code for JK flipflop:
-module behJK(JK,clk,Q,Qbar);
- input[1:0] JK;
- input clk;
- output Q,Qbar;
- reg Q,Qbar;
- always@(posedge clk)
- begin
- case(JK)
- 0:Q=Q;
- 1:Q=0;
- 2:Q=1;
- 3:Q=~Q;
- endcase
- Qbar=~Q;
- end
+module JffK(JK,clk,Q,Qbar,reset);
+       input[1:0] JK;
+       input clk,reset;
+       output Q,Qbar;
+       reg Q,Qbar;
+       always@(posedge clk)
+       begin
+              case(JK)
+					  0:Q=Q;
+					  1:Q=0;
+					  2:Q=1;
+					  3:Q=~Q;
+             endcase
+       Qbar=~Q;
+    end
 endmodule
 
-initial
-begin
-// Initialize Inputs
-JK = 0;
-clk = 0;
-reset = 0;
-end
-always
-#20 clk = ~clk;
-initial 
-begin
-$monitor($time,"JK = %b, Q = %b, Qbar = %b",JK,Q,Qbar);
-#200 $stop;
-end
+initial begin
+		// Initialize Inputs
+			JK = 0;
+			clk = 0;
+			reset = 0;
+			JK=00;#20 ;
+			JK=01;#20;
+			JK=10;#20;
+			JK=11;#20;
+		end
+		always
+			#20 clk=~clk;
+		initial
+			 begin
+			 $monitor($time,"JK=%b,Q=%bQbar=%d",JK,Q,Qbar);
+			#200 $stop;
+			end
+      
 endmodule
